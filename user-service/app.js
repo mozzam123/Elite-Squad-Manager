@@ -1,10 +1,10 @@
 const express = require("express");
 const app = express();
-const path = require('path');
+const path = require("path");
 const bodyParser = require("body-parser");
 const userModel = require("./src/models/userModel");
-const createConsumer = require("./config/kafkaConsumer");
-const { updateUserBalance } = require("./utils")
+const { createConsumer } = require("./config/kafkaConsumer");
+const { updateUserBalance } = require("./utils");
 
 // Parse request bodies
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,11 +20,14 @@ app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
 
 // Create kafka consumer instance
-const consumer = createConsumer('auth-service', ['player-created'], async ({ message }) => {
-    console.log("***** consumer message",{value: message.value.toString(),
-    });
+const consumer = createConsumer(
+  "auth-service",
+  ["player-created"],
+  async ({ message }) => {
+    console.log("***** consumer message", { value: message.value.toString() });
     await updateUserBalance(message);
-});
+  }
+);
 
 // Start Kafka consumer when the application starts
 consumer.runConsumer().catch(console.error);
@@ -37,15 +40,15 @@ app.use("/", authController);
 app.use("/api", apiRouter);
 
 // Gracefully disconnect Kafka consumer when the application is terminated
-process.on('SIGINT', async () => {
-    await consumer.disconnectConsumer();
-    process.exit();
+process.on("SIGINT", async () => {
+  await consumer.disconnectConsumer();
+  process.exit();
 });
 
 // Gracefully disconnect Kafka consumer when the application is terminated (for Windows)
-process.on('SIGTERM', async () => {
-    await consumer.disconnectConsumer();
-    process.exit();
+process.on("SIGTERM", async () => {
+  await consumer.disconnectConsumer();
+  process.exit();
 });
 
 module.exports = app;
