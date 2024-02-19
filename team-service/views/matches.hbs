@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <title>Upcoming matches</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <style>
+    .scrollable-table {
+      max-height: 300px;
+      /* Set the maximum height for the table body */
+      overflow-y: auto;
+      /* Add a scrollbar when content overflows */
+    }
+  </style>
+</head>
+
+<header>
+  <div>
+    {{> navbar}}
+  </div>
+</header>
+
+<body>
+  <div class="container-fluid mt-4">
+    <div class="row">
+      <div class="col-6">
+        <h1>Upcoming CL Matches</h1>
+        <div class="card">
+          <div class="card-body">
+            <div class="scrollable-table"> <!-- Wrap the table in a div with the scrollable-table class -->
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Home Team</th>
+                    <th>Away Team</th>
+                    <th>Stage</th>
+                    <!-- Add more columns as needed -->
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each matches}}
+                  <tr>
+                    <td>{{this.homeTeam.shortName}}</td>
+                    <td>{{this.awayTeam.shortName}}</td>
+                    <td>{{this.stage}}</td>
+                    <!-- Add more columns as needed -->
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <h1>CL Standings</h1>
+        <div class="card">
+          <div class="card-body">
+            <div class="scrollable-table"> <!-- Wrap the table in a div with the scrollable-table class -->
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Position</th>
+                    <th>Team</th>
+                    <th>Group</th>
+                    <th>MP</th>
+                    <th>W</th>
+                    <th>D</th>
+                    <th>L</th>
+
+
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each standings}}
+                  {{#each table}}
+                  <tr>
+                    <td>{{position}}</td>
+                    <td>{{team.shortName}}</td>
+                    <td>{{../group}}</td>
+                    <td>{{playedGames}}</td>
+                    <td>{{won}}</td>
+                    <td>{{draw}}</td>
+                    <td>{{lost}}</td>
+                    <!-- Adjust the path based on your data structure -->
+                    <!-- Add more columns as needed -->
+                  </tr>
+                  {{/each}}
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </div>
+</body>
+
+</html>

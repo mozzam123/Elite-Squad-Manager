@@ -1,0 +1,81 @@
+
+<!-- Add "Create Player" button above the table -->
+{{!-- <button type="button" onclick="openCreatePlayerModal()" class="btn btn-primary"
+    style="margin-left: 86%; margin-top: 10px; margin-bottom: 10px; margin-right: 10px;">Create Player</button> --}}
+
+<div>
+<h2>Mozzam's Players</h2>
+    <div class="card">
+        <div class="card-body">
+            <div class="scrollable-table">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Height</th>
+                            <th>Nationality</th>
+                            <th>Weight</th>
+                            <th>Position</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each userPlayers}}
+                        <tr>
+                            <td>{{name}}</td>
+                            <td>{{height}}</td>
+                            <td>{{nationality}}</td>
+                            <td>{{weight}}</td>
+                            <td>{{position}}</td>
+                            <td><button type="button" onclick="deleteTask('{{this._id}}')"
+                                    class="btn btn-danger">Delete</button></td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal for creating a new player -->
+<div class="modal fade" id="createPlayerModal" tabindex="-1" role="dialog" aria-labelledby="createPlayerModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createPlayerModalLabel">Create Player</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form fields for creating a new player -->
+                <form id="createPlayerForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="position">Position</label>
+                        <input type="text" class="form-control" id="position" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Height (in cms)</label>
+                        <input type="text" class="form-control" id="height" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nationality">Nationality</label>
+                        <input type="text" class="form-control" id="nationality" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">Weight (in Kgs)</label>
+                        <input type="text" class="form-control" id="weight" required>
+                    </div>
+                    <button type="submit" onclick="createPlayer()" class="btn btn-primary">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
