@@ -59,7 +59,7 @@ exports.getUser = async (req, res) => {
         const userInfo = await User.find({ username: req.body.username })
 
         if (userInfo.length === 0) {
-            return res.status(404).json({ status: "error", result: "User does not found" })
+            return res.status(200).json({ status: "error", result: "User does not found" })
         }
         res.status(200).json({ status: "success", result: userInfo })
 
