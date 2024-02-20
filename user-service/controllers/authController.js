@@ -1,8 +1,9 @@
 process.env.KAFKAJS_NO_PARTITIONER_WARNING = '1';
-const userModel = require("./../src/models/userModel");
 const { authenticateUser, sendKafkaMessage } = require("./../utils")
 const axios = require("axios")
-
+const dotenv = require("dotenv");
+dotenv.config({ path: "./../config.env" });
+const user_endpoint = process.env.User_service_Endpoint
 
 exports.getLoginPage = async (req, res) => {
   res.render("login");
@@ -14,13 +15,14 @@ exports.postLoginUser = async (req, res) => {
   const password = req.body.password;
 
 
+
   try {
     const existingUser = await authenticateUser(username, req.body.password)
 
     if (!existingUser) {
       return res.render("login", { alredyExist: "Invalid credentials" });
     }
-    const apiResponse = await axios.post("http://127.0.0.1:1111/api/login", {
+    const apiResponse = await axios.post(`${user_endpoint}/api/login`, {
       username,
       password
     })
@@ -101,7 +103,7 @@ exports.postRegisterUser = async (req, res) => {
   const password = req.body.password;
   const email = req.body.email;
   try {
-    const apiResponse = await axios.post("http://127.0.0.1:1111/api/register", {
+    const apiResponse = await axios.post(`${user_endpoint}/api/register`, {
       username,
       password,
       email

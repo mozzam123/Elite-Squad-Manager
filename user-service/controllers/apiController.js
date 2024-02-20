@@ -2,17 +2,15 @@ const User = require("./../src/models/userModel")
 const { authenticateUser } = require("./../utils")
 
 
-
 // Login User
 exports.loginUser = async (req, res) => {
-
     try {
         const existingUser = await authenticateUser(req.body.username, req.body.password)
 
         if (!existingUser) {
             return res.status(401).json({ error: "Invalid Credentials!!" })
         }
-        return res.status(200).json({ message: existingUser })
+        return res.status(200).json({ message: "success", username: existingUser.username })
     } catch (error) {
         console.log(error);
     }

@@ -1,3 +1,4 @@
+KAFKAJS_NO_PARTITIONER_WARNING=1
 const { Kafka, logLevel } = require("kafkajs");
 
 const kafka = new Kafka({

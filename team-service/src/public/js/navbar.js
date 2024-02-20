@@ -1,3 +1,7 @@
+const dotenv = require("dotenv");
+dotenv.config({ path: "./../config.env" });
+const user_endpoint = process.env.User_service_Endpoint
+
 function loginPage() {
-    window.location.href = "http://127.0.0.1:1111/login"
+    window.location.href = `${user_endpoint}/login`
 }
