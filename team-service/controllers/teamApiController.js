@@ -34,14 +34,17 @@ exports.createTeam = async (req, res) => {
         });
 
         if (userResponse.data.status === 'error') {
-            return res.json({ status: "error", message: "User not found" });
+            return res.status(StatusCodes.NOT_FOUND).json({ status: "error", message: "User not found" });
         }
+
+        // Saving User response data
         const userData = userResponse.data.result[0]
-        console.log(userData._id);
+
+        // check if team already exist
         const existingTeam = await Team.find({ teamName: teamName, ownerId: userData._id })
 
         if (existingTeam.length > 0) {
-            return res.json({ status: "error", message: "Team already exists" });
+            return res.status(StatusCodes.BAD_REQUEST).json({ status: "error", message: "Team already exists" });
         }
 
         const newTeam = await new Team({
@@ -64,10 +67,15 @@ exports.createTeam = async (req, res) => {
 // Get Single Team
 exports.getTeam = async (req, res) => {
     try {
-        const owner = req.body.owner
-        const userTeam = await Team.find({ owner: owner }).populate('players')
+        const ownerId = req.body.ownerId
+        const userTeam = await Team.find({ ownerId: ownerId })
+        console.log(userTeam);
 
-        res.status(StatusCodes.ACCEPTED).json({
+        if (userTeam.length == 0) {
+            return res.status(StatusCodes.NOT_FOUND).json({status: "error", reason: "Team does not found"})
+        }
+
+        return res.status(StatusCodes.ACCEPTED).json({
             status: "success",
             result: userTeam
         })
@@ -75,7 +83,7 @@ exports.getTeam = async (req, res) => {
     } catch (error) {
         res.status(StatusCodes.BAD_REQUEST).json({
             status: "error",
-            reason: error.message // Use error.message to get a more informative error message
+            reason: "Owner Id does not exist"// Use error.message to get a more informative error message
         });
     }
 }
