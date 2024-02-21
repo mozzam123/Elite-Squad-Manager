@@ -56,16 +56,13 @@ exports.getAllUser = async (req, res) => {
 // Get User By Username
 exports.getUser = async (req, res) => {
     try {
-        const userInfo = await User.find({ username: req.body.username })
-
-        if (userInfo.length === 0) {
-            return res.status(200).json({ status: "error", result: "User does not found" })
+        const userInfo = await User.findById(req.body.userId)
+        if (userInfo) {
+            res.status(200).json({ status: "success", result: userInfo })
         }
-        res.status(200).json({ status: "success", result: userInfo })
 
     } catch (error) {
         console.error("Error is: ", error)
-        res.status(400).json({ status: "error", message: error })
-
+        res.status(200).json({ status: "error", reason: "User does not found" })
     }
 }
