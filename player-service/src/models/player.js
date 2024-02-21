@@ -6,7 +6,7 @@ const playerSchema = new mongoose.Schema({
     position: { type: String, required: true },
     height: { type: String, required: true },
     nationality: { type: String, required: true },
-    weight: { type: Number, required: true },
+    weight: { type: String, required: true },
     amount: { type: Number, required: true },
     teamId: { type: mongoose.Schema.Types.ObjectId, ref: 'Team', required: true },
 });
