@@ -72,7 +72,7 @@ exports.getTeam = async (req, res) => {
         console.log(userTeam);
 
         if (userTeam.length == 0) {
-            return res.status(StatusCodes.NOT_FOUND).json({status: "error", reason: "Team does not found"})
+            return res.status(StatusCodes.NOT_FOUND).json({ status: "error", reason: "Team does not found" })
         }
 
         return res.status(StatusCodes.ACCEPTED).json({
@@ -92,23 +92,24 @@ exports.getTeam = async (req, res) => {
 // Get Single Team by Team ID
 exports.getTeamById = async (req, res) => {
     try {
-        const teamId = req.body.teamId
-        const userTeam = await Team.findById(teamId)
+        const teamId = req.body.teamId;
+        const userTeam = await Team.findById(teamId);
 
-        if (userTeam.length == 0) {
-            return res.status(StatusCodes.NOT_FOUND).json({status: "error", reason: "Team does not found"})
+        if (userTeam) {
+            return res.status(StatusCodes.ACCEPTED).json({
+                status: "success",
+                result: userTeam
+            });
         }
 
-        return res.status(StatusCodes.ACCEPTED).json({
-            status: "success",
-            result: userTeam
-        })
 
     } catch (error) {
-        res.status(StatusCodes.BAD_REQUEST).json({
+        res.status(StatusCodes.NOT_FOUND).json({
             status: "error",
-            reason: "Team Id does not exist"// Use error.message to get a more informative error message
+            reason: "Team not found"
+            // You can use error.message to get a more informative error message if needed
         });
     }
-}
+};
+
 
