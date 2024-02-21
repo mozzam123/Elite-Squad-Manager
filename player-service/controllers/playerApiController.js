@@ -1,3 +1,8 @@
-exports.test = async (req, res) => {
-    return res.json({message: "working new"})
+exports.addPlayer = async (req, res) => {
+    try {
+        res.json({ message: "mozzam" })
+
+    } catch (error) {
+        console.log(error);
+    }
 }

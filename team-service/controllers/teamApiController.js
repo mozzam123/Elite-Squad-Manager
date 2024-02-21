@@ -64,7 +64,7 @@ exports.createTeam = async (req, res) => {
     }
 };
 
-// Get Single Team
+// Get Single Team by Owner ID
 exports.getTeam = async (req, res) => {
     try {
         const ownerId = req.body.ownerId

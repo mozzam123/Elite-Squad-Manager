@@ -3,6 +3,6 @@ const router = express.Router()
 const playerApiController = require("./../controllers/playerApiController")
 
 
-router.route('/test').get(playerApiController.test)
+router.route('/addPlayer').post(playerApiController.addPlayer)
 
 module.exports = router

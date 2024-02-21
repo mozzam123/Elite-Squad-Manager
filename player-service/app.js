@@ -6,7 +6,6 @@ const hbs = require('hbs')
 // Routes
 const playerApiRoutes = require("./routes/playerApiRoutes")
 
-console.log('running the app.js');
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, "/src/public")))
 
