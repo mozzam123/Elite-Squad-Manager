@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./../config.env" });
 const team_endpoint = process.env.Team_service_Endpoint
 
+
 // Add Player to the Team
 exports.addPlayer = async (req, res) => {
     try {
@@ -15,9 +16,11 @@ exports.addPlayer = async (req, res) => {
 
         // Check if the team is found based on the response status
         if (apiResponse.data.status === "success") {
+            console.log(apiResponse.data);
 
             // check if Player already exist in the team
             const existingPlayer = await playerModel.find({ playerName: req.body.name, teamId: teamId })
+            console.log(existingPlayer);
 
             if (existingPlayer.length > 0) {
                 return res.json({ message: "Player Already Exist" })
@@ -34,13 +37,16 @@ exports.addPlayer = async (req, res) => {
 
             return res.json({ status: "success", result: newPlayer })
         }
+        else {
+            return res.status(StatusCodes.NOT_FOUND).json({ status: "error", message: "Team not found" });
+        }
 
 
     } catch (error) {
         // Check if the error is due to a 404 status code
-        if (error.response && error.response.status === 404) {
-            return res.status(StatusCodes.NOT_FOUND).json({ status: "error", message: "Team not found" });
-        }
+        // if (error.response && error.response.status === 404) {
+        //     return res.status(StatusCodes.NOT_FOUND).json({ status: "error", message: "Team not found" });
+        // }
 
         // Handle other errors and respond with a generic error status and reason
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
@@ -49,4 +55,5 @@ exports.addPlayer = async (req, res) => {
         });
     }
 };
+
 
