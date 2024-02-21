@@ -4,26 +4,27 @@ const { StatusCodes } = require("http-status-codes");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./../config.env" });
 const team_endpoint = process.env.Team_service_Endpoint
-
+ 
 
 // Add Player to the Team
 exports.addPlayer = async (req, res) => {
     try {
         const teamId = req.body.teamId;
+
+        // Call the get-team-by-id endpoint
         const apiResponse = await axios.post(`${team_endpoint}/api/team/get-team-by-id`, {
             teamId,
         });
 
-        // Check if the team is found based on the response status
-        if (apiResponse.data.status === "success") {
-            console.log(apiResponse.data);
-
-            // check if Player already exist in the team
-            const existingPlayer = await playerModel.find({ playerName: req.body.name, teamId: teamId })
-            console.log(existingPlayer);
+        // Check if the team is found
+        if (apiResponse.data.status === 'success') {
+            const teamDetails = apiResponse.data.result
+            const existingPlayer = await playerModel.find({ playerName: req.body.name, teamId: req.body.teamId })
+            console.log('Body Name: ', req.body.name);
+            console.log('Existing Player: ', existingPlayer);
 
             if (existingPlayer.length > 0) {
-                return res.json({ message: "Player Already Exist" })
+                return res.json({ status: "error", reason: "Player Already Exist" })
             }
             const newPlayer = await new playerModel({
                 playerName: req.body.name,
@@ -35,25 +36,24 @@ exports.addPlayer = async (req, res) => {
                 teamId: req.body.teamId
             }).save()
 
-            return res.json({ status: "success", result: newPlayer })
+            res.status(StatusCodes.ACCEPTED).json({
+                status: 'success',
+                result: newPlayer, // Update with your response
+            });
         }
-        else {
-            return res.status(StatusCodes.NOT_FOUND).json({ status: "error", message: "Team not found" });
-        }
-
-
     } catch (error) {
+        // console.log("Error Response: ", error.response.data);
+
         // Check if the error is due to a 404 status code
         // if (error.response && error.response.status === 404) {
-        //     return res.status(StatusCodes.NOT_FOUND).json({ status: "error", message: "Team not found" });
+        //     return res.status(StatusCodes.NOT_FOUND).json({ status: "error", message: error.response.data.reason });
         // }
 
-        // Handle other errors and respond with a generic error status and reason
+        // Handle other errors if needed
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            status: "error",
-            reason: "Internal server error"
+            status: 'error',
+            reason: error,
         });
     }
 };
-
 
