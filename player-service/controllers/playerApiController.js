@@ -20,22 +20,25 @@ exports.addPlayer = async (req, res) => {
         // Check if the team is found
         if (apiResponse.data.status === 'success') {
             const teamDetails = apiResponse.data.result
-            console.log('*team details: ', teamDetails.ownerId);
+
+            // check if player already exist or not
             const existingPlayer = await playerModel.find({ playerName: req.body.name, teamId: req.body.teamId })
-            console.log('Body Name: ', req.body.name);
-            console.log('Existing Player: ', existingPlayer);
 
             if (existingPlayer.length > 0) {
                 return res.json({ status: "error", reason: "Player Already Exist" })
             }
 
             // Call the Get User by user id endpoint
-
             const userResponse = await axios.post(`${user_endpoint}/api/getuser`, {
                 userId: teamDetails.ownerId,
             });
             if (userResponse.data.status === 'success') {
-                console.log(userResponse);
+                const userBalance = userResponse.data.result.balance;
+                console.log('Player amount: ', req.body.amount);
+
+                if (userBalance < req.body.amount) {
+                    return res.json({ status: "error", reason: "Insufficient Balance" })
+                }
             }
 
             const newPlayer = await new playerModel({
@@ -48,7 +51,7 @@ exports.addPlayer = async (req, res) => {
                 teamId: req.body.teamId
             }).save()
 
-            res.status(StatusCodes.ACCEPTED).json({
+            return res.status(StatusCodes.ACCEPTED).json({
                 status: 'success',
                 result: newPlayer, // Update with your response
             });
