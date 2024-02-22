@@ -73,3 +73,23 @@ exports.addPlayer = async (req, res) => {
     }
 };
 
+
+// Delete Player
+exports.deletePlayer = async (req, res) => {
+    try {
+        console.log(req.query.id);
+        const existingPlayer = await playerModel.findByIdAndDelete(req.query.id)
+        console.log(existingPlayer);
+
+        if (!existingPlayer) {
+            return res.status(404).json({ status: "success", reason: "Player Does not Exist" })
+        }
+
+        return res.status(200).json({ status: "success", result: "Player Deleted" })
+
+
+    } catch (error) {
+        console.log('Error in deletePlayer endpoint: ', error);
+        res.status(400).json({ status: "success", reason: "Id is not valid" })
+    }
+}
