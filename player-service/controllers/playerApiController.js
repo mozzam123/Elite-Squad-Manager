@@ -111,3 +111,46 @@ exports.getAllPlayers = async (req, res) => {
         });
     }
 };
+
+
+// Get Single Player
+exports.getPlayer = async (req, res) => {
+    try {
+        const player = await playerModel.findById(req.query.id);
+        return res.status(StatusCodes.OK).json({
+            status: "success",
+            result: player,
+        });
+    } catch (error) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            status: "error",
+            error: "Player does not exist",
+        });
+    }
+};
+
+
+// Update Player
+exports.updatePlayer = async (req, res) => {
+    try {
+        const updatePlayer = await playerModel.findByIdAndUpdate(
+            req.query.id,
+            req.body,
+            {
+                new: true,
+                runValidators: true,
+            }
+        );
+        console.log("&&&", updatePlayer);
+
+        res.status(StatusCodes.ACCEPTED).json({
+            status: "Updated successfully",
+            result: updatePlayer,
+        });
+    } catch (error) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            status: "error",
+            error: "Invalid Id",
+        });
+    }
+};
