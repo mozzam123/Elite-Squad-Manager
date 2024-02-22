@@ -1,4 +1,4 @@
-KAFKAJS_NO_PARTITIONER_WARNING=1
+KAFKAJS_NO_PARTITIONER_WARNING = 1
 const { Kafka, logLevel } = require('kafkajs');
 
 // Create kafka producer instance
@@ -7,4 +7,35 @@ const kafkaProducer = new Kafka({
     logLevel: logLevel.WARN
 }).producer()
 
-module.exports = { kafkaProducer }
+// For Kafka Consumer
+const kafka = new Kafka({
+    brokers: ["localhost:9092"],
+    logLevel: logLevel.WARN,
+});
+
+
+const createConsumer = (groupId, topics, eachMessageHandler) => {
+    const consumer = kafka.consumer({ groupId });
+
+    const runConsumer = async () => {
+        await consumer.connect();
+        console.log(`Consumer connected: ${groupId}`);
+        await consumer.subscribe({ topics, fromBeginning: false });
+
+        await consumer.run({
+            eachMessage: eachMessageHandler,
+        });
+    };
+
+    const disconnectConsumer = async () => {
+        await consumer.disconnect();
+        console.log(`Consumer disconnected: ${groupId}`);
+    };
+
+    return {
+        runConsumer,
+        disconnectConsumer,
+    };
+};
+
+module.exports = { kafkaProducer, createConsumer }

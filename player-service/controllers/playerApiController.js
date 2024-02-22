@@ -79,7 +79,7 @@ exports.deletePlayer = async (req, res) => {
     try {
         console.log(req.query.id);
         const existingPlayer = await playerModel.findByIdAndDelete(req.query.id)
-        console.log(existingPlayer);
+        console.log("****Player Deleted by endpoint");
 
         if (!existingPlayer) {
             return res.status(404).json({ status: "success", reason: "Player Does not Exist" })
@@ -141,7 +141,7 @@ exports.updatePlayer = async (req, res) => {
                 runValidators: true,
             }
         );
-        console.log("&&&", updatePlayer);
+        console.log("Player Details updated")
 
         res.status(StatusCodes.ACCEPTED).json({
             status: "Updated successfully",
