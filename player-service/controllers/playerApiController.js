@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./../config.env" });
 const team_endpoint = process.env.Team_service_Endpoint
 const user_endpoint = process.env.User_service_Endpoint
+const { sendKafkaMessage } = require("./../utils")
 
 
 // Add Player to the Team
@@ -48,6 +49,9 @@ exports.addPlayer = async (req, res) => {
                 teamId: req.body.teamId
             }).save()
 
+            // Send Kafka Message
+            sendKafkaMessage('player-created', { id: teamDetails.ownerId, amount: newPlayer.amount })
+
             return res.status(StatusCodes.ACCEPTED).json({
                 status: 'success',
                 result: newPlayer, // Update with your response
@@ -57,9 +61,9 @@ exports.addPlayer = async (req, res) => {
         // console.log("Error Response: ", error.response.data);
 
         // Check if the error is due to a 404 status code
-        // if (error.response && error.response.status === 404) {
-        //     return res.status(StatusCodes.NOT_FOUND).json({ status: "error", message: error.response.data.reason });
-        // }
+        if (error.response && error.response.status === 404) {
+            return res.status(StatusCodes.NOT_FOUND).json({ status: "error", message: error.response.data.reason });
+        }
 
         // Handle other errors if needed
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
