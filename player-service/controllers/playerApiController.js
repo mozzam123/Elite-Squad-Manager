@@ -93,3 +93,21 @@ exports.deletePlayer = async (req, res) => {
         res.status(400).json({ status: "success", reason: "Id is not valid" })
     }
 }
+
+
+// Get All Players 
+exports.getAllPlayers = async (req, res) => {
+    try {
+        const allPlayers = await playerModel.find();
+
+        res.status(StatusCodes.OK).json({
+            status: "success",
+            results: allPlayers,
+        });
+    } catch (error) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            status: "error",
+            message: error,
+        });
+    }
+};

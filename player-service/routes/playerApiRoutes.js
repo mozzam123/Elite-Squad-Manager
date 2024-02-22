@@ -5,5 +5,6 @@ const playerApiController = require("./../controllers/playerApiController")
 
 router.route('/addPlayer').post(playerApiController.addPlayer)
 router.route('/deletePlayer').delete(playerApiController.deletePlayer)
+router.route('/getAllPlayers').get(playerApiController.getAllPlayers)
 
 module.exports = router
