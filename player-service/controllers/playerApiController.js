@@ -32,13 +32,10 @@ exports.addPlayer = async (req, res) => {
             const userResponse = await axios.post(`${user_endpoint}/api/getuser`, {
                 userId: teamDetails.ownerId,
             });
-            if (userResponse.data.status === 'success') {
-                const userBalance = userResponse.data.result.balance;
-                console.log('Player amount: ', req.body.amount);
 
-                if (userBalance < req.body.amount) {
-                    return res.json({ status: "error", reason: "Insufficient Balance" })
-                }
+            // check if user balance is greater than player amount
+            if (userResponse.data.result.balance < req.body.amount) {
+                return res.json({ status: "error", reason: "Insufficient Balance" })
             }
 
             const newPlayer = await new playerModel({
