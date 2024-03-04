@@ -53,8 +53,8 @@ exports.getAllUser = async (req, res) => {
     }
 }
 
-// Get User By Username
-exports.getUser = async (req, res) => {
+// Get User By ID
+exports.getUserById = async (req, res) => {
     try {
         const userInfo = await User.findById(req.body.userId)
         if (userInfo) {
@@ -62,7 +62,22 @@ exports.getUser = async (req, res) => {
         }
 
     } catch (error) {
-        console.error("Error is: ", error)
-        res.status(200).json({ status: "error", reason: "User does not found" })
+        console.error("Error in Get User By Username: ", error)
+        res.status(404).json({ status: "error", reason: "User does not found" })
+    }
+}
+
+// Get User By username
+exports.getUserByUsername = async (req, res) => {
+    try {
+        const userInfo = await User.find({ username: req.body.username })
+        if (userInfo.length <= 0) {
+            return res.status(404).json({ status: "error", reason: "User does not found" })
+        }
+        return res.status(200).json({ status: "success", result: userInfo })
+        
+    } catch (error) {
+        console.error("Error in Get User By Username: ", error)
+        res.status(400).json({ status: "error", reason: error })
     }
 }

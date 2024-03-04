@@ -27,11 +27,14 @@ exports.createTeam = async (req, res) => {
     try {
         // Use object destructuring directly with property names
         const { username, teamName } = req.body;
+        console.log(username);
+        console.log(teamName);
 
         // Check if the user exists
         const userResponse = await axios.post(`${user_endpoint}/api/getuser`, {
             username,
         });
+        console.log(userResponse);
 
         if (userResponse.data.status === 'error') {
             return res.status(StatusCodes.NOT_FOUND).json({ status: "error", message: "User not found" });
