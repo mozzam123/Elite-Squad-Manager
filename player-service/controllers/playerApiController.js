@@ -30,7 +30,7 @@ exports.addPlayer = async (req, res) => {
             }
 
             // Call the Get User by user id endpoint
-            const userResponse = await axios.post(`${user_endpoint}/api/getuser`, {
+            const userResponse = await axios.post(`${user_endpoint}/api/getuserbyid`, {
                 userId: teamDetails.ownerId,
             });
 

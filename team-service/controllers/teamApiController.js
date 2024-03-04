@@ -59,8 +59,15 @@ exports.createTeam = async (req, res) => {
         return res.json({ status: "success", result: newTeam })
 
     } catch (error) {
+        // API related error will go into the below block
+        if (error && error.response.data) {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                status: "error",
+                reason: error.response.data.reason 
+            });
+        }
         // Handle errors and respond with an error status and reason
-        res.status(StatusCodes.BAD_REQUEST).json({
+        return  res.status(StatusCodes.BAD_REQUEST).json({
             status: "error",
             reason: error.message // Use error.message to get a more informative error message
         });
